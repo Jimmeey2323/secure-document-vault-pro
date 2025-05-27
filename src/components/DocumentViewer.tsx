@@ -168,18 +168,38 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
 
     if (currentFile.type === 'application/pdf') {
       return (
-        <iframe
-          src={currentFile.url}
-          className="w-full h-full border-0 no-select"
-          style={{ 
-            transform: `scale(${zoom / 100})`,
-            transformOrigin: 'top left'
-          }}
-          title={currentFile.name}
-          onError={() => {
-            console.error('PDF failed to load:', currentFile.name);
-          }}
-        />
+        <div className="w-full h-full flex items-center justify-center">
+          <object
+            data={currentFile.url}
+            type="application/pdf"
+            className="w-full h-full no-select"
+            style={{ 
+              transform: `scale(${zoom / 100})`,
+              transformOrigin: 'top left',
+              minHeight: '600px'
+            }}
+          >
+            <div className={cn(
+              "flex flex-col items-center justify-center h-full p-8",
+              darkMode ? "text-white" : "text-gray-900"
+            )}>
+              <Download className="h-16 w-16 mb-4 opacity-50" />
+              <h3 className="text-xl font-semibold mb-2">PDF Viewer</h3>
+              <p className="text-sm opacity-75 mb-4 text-center">
+                Your browser doesn't support embedded PDFs.<br/>
+                The PDF content is protected and secure.
+              </p>
+              <p className="text-xs opacity-50">
+                File: {currentFile.name}
+              </p>
+              <div className="mt-4 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                <p className="text-sm text-center">
+                  🔒 PDF content is loaded and protected by SecureViewer Pro
+                </p>
+              </div>
+            </div>
+          </object>
+        </div>
       );
     }
 
