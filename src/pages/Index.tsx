@@ -53,14 +53,17 @@ const Index = () => {
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
       const id = Math.random().toString(36).substr(2, 9);
+      
+      // Create blob URL for the file
       const url = URL.createObjectURL(file);
+      console.log('Created blob URL for file:', file.name, 'URL:', url, 'Type:', file.type);
       
       const uploadedFile: UploadedFile = {
         id,
         file,
         name: file.name,
         size: formatFileSize(file.size),
-        type: file.type,
+        type: file.type || 'application/octet-stream', // Ensure type is always set
         url,
         progress: 0
       };

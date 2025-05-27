@@ -143,6 +143,8 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   const renderContent = () => {
     if (!currentFile) return null;
 
+    console.log('Rendering file:', currentFile.name, 'Type:', currentFile.type, 'URL:', currentFile.url);
+
     if (currentFile.type.startsWith('image/')) {
       return (
         <img
@@ -154,6 +156,12 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
             transition: 'transform 0.3s ease'
           }}
           draggable={false}
+          onError={(e) => {
+            console.error('Image failed to load:', currentFile.name, currentFile.url);
+          }}
+          onLoad={() => {
+            console.log('Image loaded successfully:', currentFile.name);
+          }}
         />
       );
     }
@@ -168,6 +176,9 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
             transformOrigin: 'top left'
           }}
           title={currentFile.name}
+          onError={() => {
+            console.error('PDF failed to load:', currentFile.name);
+          }}
         />
       );
     }
@@ -191,6 +202,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
       );
     }
 
+    // Default fallback for unsupported file types
     return (
       <div className="flex items-center justify-center h-full">
         <div className={cn(
@@ -204,6 +216,9 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
           </p>
           <p className="text-xs mt-2 opacity-50">
             File: {currentFile.name}
+          </p>
+          <p className="text-xs mt-1 opacity-50">
+            Type: {currentFile.type}
           </p>
         </div>
       </div>
