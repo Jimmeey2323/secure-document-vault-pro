@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight, Download, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -32,10 +31,30 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   const [sessionId] = useState(() => Math.random().toString(36).substr(2, 9));
   const [timestamp] = useState(() => new Date().toLocaleString());
   const [isBlurred, setIsBlurred] = useState(false);
+  const [pdfData, setPdfData] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   const currentFile = files[currentIndex];
+
+  // Convert blob to data URL for PDF
+  useEffect(() => {
+    if (currentFile && currentFile.type === 'application/pdf') {
+      console.log('Converting PDF blob to data URL for:', currentFile.name);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        console.log('PDF data URL created, length:', result?.length);
+        setPdfData(result);
+      };
+      reader.onerror = (e) => {
+        console.error('FileReader error:', e);
+      };
+      reader.readAsDataURL(currentFile.file);
+    } else {
+      setPdfData(null);
+    }
+  }, [currentFile]);
 
   // Disable right-click context menu
   useEffect(() => {
@@ -141,11 +160,15 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
   };
 
   const renderContent = () => {
-    if (!currentFile) return null;
+    if (!currentFile) {
+      console.log('No current file to render');
+      return null;
+    }
 
     console.log('Rendering file:', currentFile.name, 'Type:', currentFile.type, 'URL:', currentFile.url);
 
     if (currentFile.type.startsWith('image/')) {
+      console.log('Rendering as image');
       return (
         <img
           src={currentFile.url}
@@ -158,6 +181,7 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
           draggable={false}
           onError={(e) => {
             console.error('Image failed to load:', currentFile.name, currentFile.url);
+            console.error('Image error event:', e);
           }}
           onLoad={() => {
             console.log('Image loaded successfully:', currentFile.name);
@@ -167,38 +191,43 @@ export const DocumentViewer: React.FC<DocumentViewerProps> = ({
     }
 
     if (currentFile.type === 'application/pdf') {
+      console.log('Rendering as PDF, pdfData available:', !!pdfData);
+      
+      if (!pdfData) {
+        return (
+          <div className="flex items-center justify-center h-full">
+            <div className={cn(
+              "text-center p-8 rounded-xl",
+              darkMode ? "bg-slate-800 text-white" : "bg-white text-gray-900"
+            )}>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Loading PDF...</h3>
+              <p className="text-sm opacity-75">
+                Converting file for secure viewing
+              </p>
+            </div>
+          </div>
+        );
+      }
+
       return (
         <div className="w-full h-full flex items-center justify-center">
-          <object
-            data={currentFile.url}
-            type="application/pdf"
-            className="w-full h-full no-select"
+          <iframe
+            src={pdfData}
+            className="w-full h-full border-0 no-select"
             style={{ 
               transform: `scale(${zoom / 100})`,
               transformOrigin: 'top left',
               minHeight: '600px'
             }}
-          >
-            <div className={cn(
-              "flex flex-col items-center justify-center h-full p-8",
-              darkMode ? "text-white" : "text-gray-900"
-            )}>
-              <Download className="h-16 w-16 mb-4 opacity-50" />
-              <h3 className="text-xl font-semibold mb-2">PDF Viewer</h3>
-              <p className="text-sm opacity-75 mb-4 text-center">
-                Your browser doesn't support embedded PDFs.<br/>
-                The PDF content is protected and secure.
-              </p>
-              <p className="text-xs opacity-50">
-                File: {currentFile.name}
-              </p>
-              <div className="mt-4 p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                <p className="text-sm text-center">
-                  🔒 PDF content is loaded and protected by SecureViewer Pro
-                </p>
-              </div>
-            </div>
-          </object>
+            title={currentFile.name}
+            onLoad={() => {
+              console.log('PDF iframe loaded successfully');
+            }}
+            onError={(e) => {
+              console.error('PDF iframe failed to load:', e);
+            }}
+          />
         </div>
       );
     }
