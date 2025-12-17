@@ -1,107 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SecureViewer Pro - Ultra-Secure Document Viewer</title>
-    <meta name="description" content="Advanced document viewer with enterprise-grade security features" />
-    <meta name="author" content="SecureViewer Pro" />
-
-    <meta property="og:title" content="SecureViewer Pro - Ultra-Secure Document Viewer" />
-    <meta property="og:description" content="Advanced document viewer with enterprise-grade security features" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.gpteng.co; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self';">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <meta name="referrer" content="no-referrer">
-
-    <!-- Disable common shortcuts -->
-    <style>
-      body {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        -webkit-touch-callout: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      
-      /* Prevent text selection */
-      * {
-        -webkit-user-select: none !important;
-        -moz-user-select: none !important;
-        -ms-user-select: none !important;
-        user-select: none !important;
-      }
-      
-      /* Prevent drag operations */
-      img, video, canvas, svg {
-        -webkit-user-drag: none !important;
-        -khtml-user-drag: none !important;
-        -moz-user-drag: none !important;
-        -o-user-drag: none !important;
-        user-drag: none !important;
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="description" content="Premium ticket management system - Modern, elegant, and powerful" />
+    <title>Physique 57 - Ticket System</title>
+    <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
   </head>
-
   <body>
     <div id="root"></div>
-    
-    <!-- Security Script -->
-    <script>
-      // Disable right-click
-      document.addEventListener('contextmenu', e => e.preventDefault());
-      
-      // Disable key combinations
-      document.addEventListener('keydown', function(e) {
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+U
-        if (e.key === 'F12' || 
-            (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-            (e.ctrlKey && e.shiftKey && e.key === 'C') ||
-            (e.ctrlKey && e.key === 'U') ||
-            (e.ctrlKey && e.key === 'S') ||
-            (e.ctrlKey && e.key === 'A') ||
-            (e.ctrlKey && e.key === 'C') ||
-            (e.ctrlKey && e.key === 'V') ||
-            (e.ctrlKey && e.key === 'P') ||
-            e.key === 'PrintScreen') {
-          e.preventDefault();
-          return false;
-        }
-      });
-      
-      // Clear console periodically
-      setInterval(() => {
-        console.clear();
-        console.log('%cSecureViewer Pro', 'color: #3B82F6; font-size: 24px; font-weight: bold;');
-        console.log('%cThis application is protected by advanced security measures.', 'color: #6B7280; font-size: 14px;');
-      }, 2000);
-      
-      // Disable clipboard
-      document.addEventListener('copy', e => e.preventDefault());
-      document.addEventListener('cut', e => e.preventDefault());
-      document.addEventListener('paste', e => e.preventDefault());
-      
-      // Detect developer tools
-      setInterval(() => {
-        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-          document.body.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #DC2626; color: white; font-family: system-ui;"><div style="text-align: center;"><h1>🛡️ Access Denied</h1><p>Developer tools detected. Close to continue.</p></div></div>';
-        }
-      }, 1000);
-    </script>
-    
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
