@@ -96,11 +96,12 @@ export default function Tickets() {
   const [slaFilter, setSlaFilter] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(true);
   const [selectedTickets, setSelectedTickets] = useState<Set<string>>(new Set());
-  const [viewMode, setViewMode] = useState<"table" | "list" | "grid" | "compact" | "kanban">("table");
+  const [viewMode, setViewMode] = useState<"table" | "list" | "grid" | "compact" | "kanban" | "grouped">("table");
   const [sortBy, setSortBy] = useState<string>("newest");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [groupBy, setGroupBy] = useState<"category" | "priority" | "status">("category");
 
   // Fetch categories from Supabase
   const { data: categories = [] } = useQuery({
@@ -410,8 +411,21 @@ export default function Tickets() {
                     <SelectItem value="grid">Grid</SelectItem>
                     <SelectItem value="compact">Compact</SelectItem>
                     <SelectItem value="kanban">Kanban</SelectItem>
+                    <SelectItem value="grouped">Grouped</SelectItem>
                   </SelectContent>
                 </Select>
+                {viewMode === "grouped" && (
+                  <Select value={groupBy} onValueChange={(v: any) => setGroupBy(v)}>
+                    <SelectTrigger className="w-32 rounded-xl">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="category">By Category</SelectItem>
+                      <SelectItem value="priority">By Priority</SelectItem>
+                      <SelectItem value="status">By Status</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
               </div>
             </div>
 
