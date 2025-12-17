@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import type { ElementType } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
@@ -60,7 +61,7 @@ interface TicketTemplate extends BaseTicketTemplate {
   lastUsed?: string;
 }
 
-const ICON_MAP: Record<string, React.ElementType> = {
+const ICON_MAP: Record<string, ElementType> = {
   Calendar,
   CreditCard,
   Users,
@@ -366,25 +367,25 @@ export default function Templates() {
   });
 
   // Fetch categories and studios for quick ticket creation
-  const { data: categories = [] } = useQuery({
-    queryKey: ['categories'],
+  const { data: dbCategories = [] } = useQuery({
+    queryKey: ["categories"],
     queryFn: async () => {
-      const { data, error } = await supabase.from('categories').select('*').eq('isActive', true);
+      const { data, error } = await supabase.from("categories").select("*").eq("isActive", true);
       if (error) throw error;
-      return data;
+      return data ?? [];
     },
   });
 
   const { data: studios = [] } = useQuery({
-    queryKey: ['studios'],
+    queryKey: ["studios"],
     queryFn: async () => {
-      const { data, error } = await supabase.from('studios').select('*').eq('isActive', true);
+      const { data, error } = await supabase.from("studios").select("*").eq("isActive", true);
       if (error) throw error;
-      return data;
+      return data ?? [];
     },
   });
 
-  const templateCategories = [...new Set(templates.map(t => t.category))];
+  const templateCategories = useMemo(() => [...new Set(templates.map((t) => t.category))], [templates]);
 
   const filteredTemplates = templates.filter(template => {
     const matchesSearch = 
@@ -410,10 +411,10 @@ export default function Templates() {
       const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
       const ticketNumber = `TKT-${year}${month}${day}-${random}`;
 
-      // Find matching category
-      const matchingCategory = categories.find(
-        (c: any) => c.name.toLowerCase().includes(template.category.toLowerCase().split(' ')[0]) ||
-             template.category.toLowerCase().includes(c.name.toLowerCase())
+      const matchingCategory = dbCategories.find(
+        (c: any) =>
+          (c.name ?? "").toLowerCase().includes((template.category ?? "").toLowerCase().split(" ")[0]) ||
+          (template.category ?? "").toLowerCase().includes((c.name ?? "").toLowerCase()),
       );
 
       // Get first studio as default
@@ -679,8 +680,10 @@ export default function Templates() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  {categories.map(cat => (
-                    <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                  {templateCategories.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
