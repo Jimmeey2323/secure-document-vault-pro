@@ -313,6 +313,108 @@ export type Database = {
         }
         Relationships: []
       }
+      momence_sessions: {
+        Row: {
+          additional_teachers: Json | null
+          banner_image_url: string | null
+          booking_count: number | null
+          capacity: number | null
+          class_details: Json | null
+          clients: Json | null
+          description: string | null
+          duration_minutes: number | null
+          ends_at: string | null
+          host_photo_url: string | null
+          id: number
+          in_person_location: Json | null
+          is_cancelled: boolean | null
+          is_draft: boolean | null
+          is_in_person: boolean | null
+          is_recurring: boolean | null
+          name: string | null
+          online_stream_password: string | null
+          online_stream_url: string | null
+          original_teacher: Json | null
+          raw: Json | null
+          starts_at: string | null
+          tags: Json | null
+          teacher: Json | null
+          type: string | null
+          updated_at: string | null
+          waitlist_booking_count: number | null
+          waitlist_capacity: number | null
+          zoom_link: string | null
+          zoom_meeting_id: string | null
+          zoom_meeting_password: string | null
+        }
+        Insert: {
+          additional_teachers?: Json | null
+          banner_image_url?: string | null
+          booking_count?: number | null
+          capacity?: number | null
+          class_details?: Json | null
+          clients?: Json | null
+          description?: string | null
+          duration_minutes?: number | null
+          ends_at?: string | null
+          host_photo_url?: string | null
+          id: number
+          in_person_location?: Json | null
+          is_cancelled?: boolean | null
+          is_draft?: boolean | null
+          is_in_person?: boolean | null
+          is_recurring?: boolean | null
+          name?: string | null
+          online_stream_password?: string | null
+          online_stream_url?: string | null
+          original_teacher?: Json | null
+          raw?: Json | null
+          starts_at?: string | null
+          tags?: Json | null
+          teacher?: Json | null
+          type?: string | null
+          updated_at?: string | null
+          waitlist_booking_count?: number | null
+          waitlist_capacity?: number | null
+          zoom_link?: string | null
+          zoom_meeting_id?: string | null
+          zoom_meeting_password?: string | null
+        }
+        Update: {
+          additional_teachers?: Json | null
+          banner_image_url?: string | null
+          booking_count?: number | null
+          capacity?: number | null
+          class_details?: Json | null
+          clients?: Json | null
+          description?: string | null
+          duration_minutes?: number | null
+          ends_at?: string | null
+          host_photo_url?: string | null
+          id?: number
+          in_person_location?: Json | null
+          is_cancelled?: boolean | null
+          is_draft?: boolean | null
+          is_in_person?: boolean | null
+          is_recurring?: boolean | null
+          name?: string | null
+          online_stream_password?: string | null
+          online_stream_url?: string | null
+          original_teacher?: Json | null
+          raw?: Json | null
+          starts_at?: string | null
+          tags?: Json | null
+          teacher?: Json | null
+          type?: string | null
+          updated_at?: string | null
+          waitlist_booking_count?: number | null
+          waitlist_capacity?: number | null
+          zoom_link?: string | null
+          zoom_meeting_id?: string | null
+          zoom_meeting_password?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           actionLabel: string | null
