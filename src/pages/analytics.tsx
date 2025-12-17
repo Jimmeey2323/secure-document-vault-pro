@@ -189,30 +189,41 @@ export default function Analytics() {
     }
   });
 
-  const computedMetrics = useMemo(() => {
-    if (!analytics) return {
-      totalTickets: 0,
-      avgResolutionTime: 0
-    };
+  const safeAnalytics = useMemo(
+    () => ({
+      ticketsByCategory: analytics?.ticketsByCategory ?? [],
+      ticketsByStudio: analytics?.ticketsByStudio ?? [],
+      ticketsByTeam: analytics?.ticketsByTeam ?? [],
+      ticketTrend: analytics?.ticketTrend ?? [],
+      resolutionTimeByPriority: analytics?.resolutionTimeByPriority ?? [],
+      topCategories: analytics?.topCategories ?? [],
+    }),
+    [analytics],
+  );
 
-    const allTickets = analytics.ticketsByCategory.reduce((sum, item) => sum + item.count, 0);
-    const avgResolutionTime = analytics.resolutionTimeByPriority.length > 0
-      ? (analytics.resolutionTimeByPriority.reduce((sum, item) => sum + item.avgHours, 0) / analytics.resolutionTimeByPriority.length).toFixed(1)
+  const computedMetrics = useMemo(() => {
+    const totalTickets = safeAnalytics.ticketsByCategory.reduce((sum, item) => sum + item.count, 0);
+    const avgResolutionTime = safeAnalytics.resolutionTimeByPriority.length > 0
+      ? Math.round(
+          (safeAnalytics.resolutionTimeByPriority.reduce((sum, item) => sum + item.avgHours, 0)
+            / safeAnalytics.resolutionTimeByPriority.length) * 10,
+        ) / 10
       : 0;
 
     return {
-      totalTickets: allTickets,
-      avgResolutionTime
+      totalTickets,
+      avgResolutionTime,
     };
-  }, [analytics]);
+  }, [safeAnalytics]);
 
-  const data = analytics;
+  const data = safeAnalytics;
+  const hasAnalyticsData = !!analytics && safeAnalytics.ticketsByCategory.length > 0;
 
   if (isLoading) {
     return <AnalyticsSkeleton />;
   }
 
-  if (!data || data.ticketsByCategory.length === 0) {
+  if (!hasAnalyticsData) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-4">
@@ -304,7 +315,7 @@ export default function Analytics() {
           const Icon = metric.icon;
           return (
             <motion.div
-              key={metric.title}
+              key={`${metric.title}-${index}`}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05 }}
